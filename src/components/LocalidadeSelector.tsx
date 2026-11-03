@@ -7,10 +7,20 @@ import { useMunicipios } from '../hooks/useMunicipios'
 const selectClass =
   'w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm disabled:bg-slate-100 disabled:text-slate-400'
 
-export default function LocalidadeSelector() {
+interface Props {
+  ufId?: number
+  municipioId?: number
+  onUfChange: (id?: number) => void
+  onMunicipioChange: (id?: number) => void
+}
+
+export default function LocalidadeSelector({
+  ufId,
+  municipioId,
+  onUfChange,
+  onMunicipioChange,
+}: Props) {
   const [regiaoId, setRegiaoId] = useState<number>()
-  const [ufId, setUfId] = useState<number>()
-  const [municipioId, setMunicipioId] = useState<number>()
 
   const regioes = useRegioes()
   const ufs = useUFs(regiaoId)
@@ -32,8 +42,7 @@ export default function LocalidadeSelector() {
           value={regiaoId ?? ''}
           onChange={(e) => {
             setRegiaoId(toNumber(e.target.value))
-            setUfId(undefined)
-            setMunicipioId(undefined)
+            onUfChange(undefined)
           }}
         >
           <option value="">Todas as regiões</option>
@@ -48,8 +57,7 @@ export default function LocalidadeSelector() {
           className={selectClass}
           value={ufId ?? ''}
           onChange={(e) => {
-            setUfId(toNumber(e.target.value))
-            setMunicipioId(undefined)
+            onUfChange(toNumber(e.target.value))
           }}
         >
           <option value="">Estado</option>
@@ -64,7 +72,7 @@ export default function LocalidadeSelector() {
           className={selectClass}
           disabled={!ufId || municipios.isLoading}
           value={municipioId ?? ''}
-          onChange={(e) => setMunicipioId(toNumber(e.target.value))}
+          onChange={(e) => onMunicipioChange(toNumber(e.target.value))}
         >
           <option value="">
             {municipios.isLoading ? 'Carregando...' : 'Município'}

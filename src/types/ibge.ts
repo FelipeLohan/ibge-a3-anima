@@ -53,3 +53,13 @@ export interface Noticia {
 export interface NoticiasResponse {
   items: Noticia[]
 }
+
+export interface MetadadosMalha {
+  id: string
+  nome: string
+  'nivel-geografico': string
+  centroide: { longitude: number; latitude: number }
+  'regiao-limitrofe': { longitude: number; latitude: number }[]
+  // A API devolve a dimensão como string (ex: "218.843")
+  area: { dimensao: string; unidade: { id: string; nome: string } }
+}

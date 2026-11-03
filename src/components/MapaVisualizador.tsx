@@ -33,7 +33,7 @@ export default function MapaVisualizador({ ufId, municipioId, onSelectMunicipio 
         {ufId && (
           <div>
             <p className="mb-2 text-sm text-slate-500">
-              Estado (clique em um município)
+              Estado (scroll para zoom, arraste para mover, clique para selecionar)
             </p>
             {estado.isLoading && <Carregando />}
             {estado.isError && (
@@ -44,6 +44,7 @@ export default function MapaVisualizador({ ufId, municipioId, onSelectMunicipio 
                 svg={estado.data}
                 destaqueId={municipioId}
                 onSelect={onSelectMunicipio}
+                zoomable
               />
             )}
           </div>
@@ -51,7 +52,12 @@ export default function MapaVisualizador({ ufId, municipioId, onSelectMunicipio 
 
         {municipioId && (
           <div>
-            <p className="mb-2 text-sm text-slate-500">Município</p>
+            <p className="mb-2 text-sm text-slate-500">
+              Município
+              {meta.data && (
+                <span className="font-semibold text-slate-800"> — {meta.data.nome}</span>
+              )}
+            </p>
             {municipio.isLoading && <Carregando />}
             {municipio.isError && (
               <p className="text-sm text-red-600">Erro ao carregar a malha.</p>

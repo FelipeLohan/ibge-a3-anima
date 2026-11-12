@@ -1,75 +1,45 @@
-# React + TypeScript + Vite
+# DataBrasil Explorer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Painel com dados abertos do IBGE: localidades (regiões, estados, municípios), malhas territoriais em mapa interativo, frequência de nomes no Censo e notícias. Projeto de front-end em React com foco em **usabilidade (Heurísticas de Nielsen)** e **acessibilidade (WCAG)**.
 
-Currently, two official plugins are available:
+- **Deploy:** _preencher após publicar (Vercel/Netlify)_
+- **Repositório:** _preencher_
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tecnologias
+React 19, TypeScript, Vite, React Router, TanStack Query, Tailwind CSS, Recharts, Vitest + Testing Library.
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+## Como rodar
+```bash
+pnpm install
+pnpm dev        # desenvolvimento
+pnpm test       # testes
+pnpm build      # build de produção (pasta dist/)
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+## Rotas
+| Rota | Conteúdo |
+|------|----------|
+| `/` | Seletores de localidade, mapa do estado/município e notícias |
+| `/nomes` | Explorador de nomes (gráfico + tabela) |
+| `/sobre` | Sobre o projeto, recursos de acessibilidade e atalhos do mapa |
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## API utilizada
+Base: `https://servicodados.ibge.gov.br/api` (pública, sem autenticação).
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| Uso | Exemplo |
+|-----|---------|
+| Regiões | `GET /v1/localidades/regioes` |
+| Estados | `GET /v1/localidades/estados` |
+| Municípios de um estado | `GET /v1/localidades/estados/35/municipios` |
+| Malha SVG (estado) | `GET /v4/malhas/estados/35?intrarregiao=municipio&qualidade=intermediaria (Accept: image/svg+xml)` |
+| Malha SVG / metadados (município) | `GET /v4/malhas/municipios/3550308` · `GET /v4/malhas/municipios/3550308/metadados` |
+| Frequência de nomes | `GET /v2/censos/nomes/maria` |
+| Notícias | `GET /v3/noticias/?qtd=6` |
 
-```
+Documentação: https://servicodados.ibge.gov.br/api/docs
+
+## Deploy
+`vercel.json` já contém o rewrite para SPA. Importar o repositório na Vercel (build: `pnpm build`, saída: `dist`). Em Netlify, adicionar `/* /index.html 200` em `public/_redirects`.
+
+## Relatório de usabilidade e acessibilidade
+Ver [`docs/relatorio.md`](docs/relatorio.md).
